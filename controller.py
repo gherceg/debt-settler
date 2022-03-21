@@ -1,7 +1,7 @@
 from exceptions import TotalAmountOwedIsNotZero
 from model import Contributor, DebtRecord
 
-def settle_debt(contributors):
+def create_debt_records(contributors):
     if not contributors:
         return None
     
@@ -20,8 +20,11 @@ def settle_debt(contributors):
         debtors.sort(key=lambda c: c.amount_owed)
         debtee = debtees.pop()
         debtor = debtors.pop()
-        record, remainder = create_debt_record(debtee, debtor)
-        debt_records.append(record)
+
+        amount_to_pay, remainder = get_amount_to_pay_with_remainder(debtee, debtor)
+        debt_record = DebtRecord(debtee=debtee.name, debtor=debtor.name, amount=amount_to_pay)
+        debt_records.append(debt_record)
+
         if remainder > 0:
             debtees.append(Contributor(name=debtee.name, amount_owed=remainder))
         elif remainder < 0:
@@ -29,12 +32,13 @@ def settle_debt(contributors):
 
     return debt_records
 
-def create_debt_record(debtee, debtor):
+def get_amount_to_pay_with_remainder(debtee, debtor):
     if debtee.amount_owed > debtor.amount_owed:
-        record = DebtRecord(debtee=debtee.name, debtor=debtor.name, amount=debtor.amount_owed)
+        amount_to_pay = debtor.amount_owed
     elif debtee.amount_owed < debtor.amount_owed:
-        record = DebtRecord(debtee=debtee.name, debtor=debtor.name, amount=debtee.amount_owed)
+        amount_to_pay = debtee.amount_owed
     else:
-        record = DebtRecord(debtee=debtee.name, debtor=debtor.name, amount=debtee.amount_owed)
+        amount_to_pay = debtee.amount_owed
 
-    return record, round(debtee.amount_owed - debtor.amount_owed, 2)
+    remainder = round(debtee.amount_owed - debtor.amount_owed, 2)
+    return amount_to_pay, remainder
