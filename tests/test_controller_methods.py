@@ -1,6 +1,8 @@
 from unittest import TestCase
 
-from settle_debt import Participant, TotalAmountOwedIsNotZero, settle_debt, create_debt_record
+from settle_debt.controller import create_debt_record, settle_debt
+from settle_debt.exceptions import TotalAmountOwedIsNotZero
+from settle_debt.model import Participant
 
 class TestSettleDebt(TestCase):
     

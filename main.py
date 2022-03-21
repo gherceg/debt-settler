@@ -1,4 +1,5 @@
-from settle_debt import Participant, settle_debt
+from controller import settle_debt
+from model import Participant
 
 participants = [
     Participant('Bobby', 991.11),

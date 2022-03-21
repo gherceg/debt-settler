@@ -1,10 +1,5 @@
-from collections import namedtuple
-
-class TotalAmountOwedIsNotZero(Exception):
-    pass
-
-Participant = namedtuple('Participant', 'name amount_owed')
-DebtRecord = namedtuple('DebtRecord', 'debtee debtor amount')
+from exceptions import TotalAmountOwedIsNotZero
+from model import DebtRecord, Participant
 
 def settle_debt(participants):
     if not participants:

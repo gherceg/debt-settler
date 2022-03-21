@@ -1,0 +1,2 @@
+class TotalAmountOwedIsNotZero(Exception):
+    pass
