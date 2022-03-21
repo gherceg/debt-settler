@@ -1,31 +1,31 @@
 from exceptions import TotalAmountOwedIsNotZero
-from model import DebtRecord, Participant
+from model import Contributor, DebtRecord
 
-def settle_debt(participants):
-    if not participants:
+def settle_debt(contributors):
+    if not contributors:
         return None
     
-    total = sum(p.amount_owed for p in participants)
+    total = sum(p.amount_owed for p in contributors)
     if total != 0 and total >= 0.01:
         raise TotalAmountOwedIsNotZero(f'Difference is {total}')
 
     debt_records = []
-    debtees = list(filter(lambda p: p.amount_owed > 0, participants))
-    debtors = list(filter(lambda p: p.amount_owed < 0, participants))
+    debtees = list(filter(lambda c: c.amount_owed > 0, contributors))
+    debtors = list(filter(lambda c: c.amount_owed < 0, contributors))
     # save us from a bunch of absolute values below
-    debtors = list(map(lambda p: Participant(p.name, abs(p.amount_owed)), debtors))
+    debtors = list(map(lambda c: Contributor(c.name, abs(c.amount_owed)), debtors))
     
     while len(debtees) > 0:
-        debtees.sort(key=lambda p: p.amount_owed)
-        debtors.sort(key=lambda p: p.amount_owed)
+        debtees.sort(key=lambda c: c.amount_owed)
+        debtors.sort(key=lambda c: c.amount_owed)
         debtee = debtees.pop()
         debtor = debtors.pop()
         record, remainder = create_debt_record(debtee, debtor)
         debt_records.append(record)
         if remainder > 0:
-            debtees.append(Participant(name=debtee.name, amount_owed=remainder))
+            debtees.append(Contributor(name=debtee.name, amount_owed=remainder))
         elif remainder < 0:
-            debtors.append(Participant(name=debtor.name, amount_owed=abs(remainder)))
+            debtors.append(Contributor(name=debtor.name, amount_owed=abs(remainder)))
 
     return debt_records
 

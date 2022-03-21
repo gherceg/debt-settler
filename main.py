@@ -1,17 +1,17 @@
 from controller import settle_debt
-from model import Participant
+from model import Contributor
 
-participants = [
-    Participant('Bobby', 991.11),
-    Participant('Lisa', -870.49),
-    Participant('Peter', 510.60),
-    Participant('Mikaela', 339.77),
-    Participant('Toby', -662.16),
-    Participant('Rebecca', -273.29),
-    Participant('Graham', 383.92),
-    Participant('Alicia', -419.46),
+contributors = [
+    Contributor('Bobby', 991.11),
+    Contributor('Lisa', -870.49),
+    Contributor('Peter', 510.60),
+    Contributor('Mikaela', 339.77),
+    Contributor('Toby', -662.16),
+    Contributor('Rebecca', -273.29),
+    Contributor('Graham', 383.92),
+    Contributor('Alicia', -419.46),
 ]
 
-records = settle_debt(participants=participants)
+records = settle_debt(contributors)
 for record in records:
     print(f'{record.debtor} pays {record.debtee} ${round(record.amount, 2)}')
